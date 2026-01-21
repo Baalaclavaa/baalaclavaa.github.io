@@ -5,9 +5,10 @@
   <title>Baalaclavaa 🍌</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ✅ FAVICON (SAFE) -->
+  <!-- ✅ FAVICON -->
   <link rel="icon" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/favicon.svg">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FFD93D">
   <meta name="theme-color" content="#000000">
 
   <style>
@@ -29,11 +30,11 @@
       position: fixed;
       inset: 0;
       background: radial-gradient(circle at top, #FFD93D 0%, #000 65%);
-      animation: glow 2.5s ease-in-out infinite;
+      animation: bgGlow 2.5s ease-in-out infinite;
       z-index: 0;
     }
 
-    @keyframes glow {
+    @keyframes bgGlow {
       0%,100% { filter: brightness(1); }
       50% { filter: brightness(1.2); }
     }
@@ -88,7 +89,7 @@
       opacity: 0.9;
     }
 
-    /* 🔗 КНОПКИ + GLOW */
+    /* 🔗 КНОПКИ */
     .links a {
       display: block;
       margin: 12px 0;
@@ -98,20 +99,29 @@
       color: #000;
       font-weight: bold;
       text-decoration: none;
-      box-shadow:
-        0 5px 0 #c9a800,
-        0 0 0 rgba(255,217,61,0);
-      transition:
-        transform 0.15s ease,
-        box-shadow 0.25s ease;
+      box-shadow: 0 5px 0 #c9a800;
+      transition: transform 0.15s ease;
+    }
+
+    /* ✨ АНИМИРОВАННОЕ СВЕЧЕНИЕ */
+    @keyframes buttonGlow {
+      0% {
+        box-shadow:
+          0 5px 0 #c9a800,
+          0 0 10px rgba(255,217,61,0.4),
+          0 0 18px rgba(255,217,61,0.6);
+      }
+      100% {
+        box-shadow:
+          0 5px 0 #c9a800,
+          0 0 22px rgba(255,217,61,0.9),
+          0 0 38px rgba(255,217,61,1);
+      }
     }
 
     .links a:hover {
       transform: translateY(2px);
-      box-shadow:
-        0 3px 0 #c9a800,
-        0 0 18px rgba(255,217,61,0.8),
-        0 0 32px rgba(255,217,61,0.5);
+      animation: buttonGlow 0.6s ease-in-out infinite alternate;
     }
 
     footer {
@@ -122,7 +132,8 @@
 
     /* 💤 REDUCED MOTION */
     @media (prefers-reduced-motion: reduce) {
-      .bg {
+      .bg,
+      .links a:hover {
         animation: none !important;
       }
       .banana {
@@ -130,7 +141,7 @@
       }
     }
 
-    /* ⏸ PAUSE WHEN TAB HIDDEN */
+    /* ⏸ ПАУЗА ПРИ СКРЫТОЙ ВКЛАДКЕ */
     .paused * {
       animation-play-state: paused !important;
     }
@@ -138,6 +149,10 @@
     /* 🐌 LOW FPS MODE */
     .low-fps .banana {
       display: none;
+    }
+
+    .low-fps .links a:hover {
+      animation: none !important;
     }
   </style>
 </head>
@@ -148,9 +163,10 @@
   <div class="banana-layer" id="bananaLayer"></div>
 
   <script>
-    /* 🍌 PARALLAX */
+    /* 🍌 PARALLAX BANANAS */
     const layer = document.getElementById("bananaLayer");
     const bananas = [];
+
     for (let i = 0; i < 18; i++) {
       const b = document.createElement("div");
       b.className = "banana";
@@ -166,7 +182,8 @@
       const x = (e.clientX / innerWidth - 0.5) * 40;
       const y = (e.clientY / innerHeight - 0.5) * 40;
       bananas.forEach(b => {
-        b.style.transform = `translate(${x * b.dataset.speed}px, ${y * b.dataset.speed}px)`;
+        b.style.transform =
+          `translate(${x * b.dataset.speed}px, ${y * b.dataset.speed}px)`;
       });
     });
 
@@ -175,7 +192,7 @@
       document.body.classList.toggle("paused", document.hidden);
     });
 
-    /* 🐌 FPS CHECK */
+    /* 🐌 FPS ADAPTIVE */
     let last = performance.now(), frames = 0;
     function fpsLoop(t) {
       frames++;
@@ -193,14 +210,13 @@
     <div class="avatar">🍌</div>
 
     <h1>Baalaclavaa</h1>
-    <div class="bio">🖤💛 Банано-Балаклавовский стример 💛🖤</div>
+    <div class="bio">🖤💛 Банано-балаклавовский стример 💛🖤</div>
 
     <div class="links">
-      <a href="https://twitch.tv/baalaclavaa" target="_blank" rel="noopener">🎮 Твич</a>
-      <a href="https://www.youtube.com/@Baalaclavaa" target="_blank" rel="noopener">▶️ Ютуб</a>
-      <a href="https://t.me/+QFRqE_hSlZVhMWMy" target="_blank" rel="noopener">✈️ Телеграм</a>
+      <a href="https://twitch.tv/baalaclavaa" target="_blank" rel="noopener">🎮 Twitch</a>
+      <a href="https://www.youtube.com/@Baalaclavaa" target="_blank" rel="noopener">▶️ YouTube</a>
+      <a href="https://t.me/+QFRqE_hSlZVhMWMy" target="_blank" rel="noopener">✈️ Telegram</a>
       <a href="https://t.me/+jr6RQyzdwJY1MDli" target="_blank" rel="noopener">🤡 Мемы</a>
-      <a href="https://boosty.to/baalaclavaa" target="_blank" rel="noopener">🎨 Бусти</a>
       <a href="https://dalink.to/baalaclavaa" target="_blank" rel="noopener">💰 Донат</a>
     </div>
 
