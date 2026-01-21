@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="32" height="32"
+     viewBox="0 0 100 100">
+
+  <!-- чёрный фон -->
+  <circle cx="50" cy="50" r="48" fill="#000"/>
+
+  <!-- жёлтая балаклава -->
+  <path d="
+    M25 30
+    Q50 10 75 30
+    V70
+    Q50 90 25 70
+    Z
+  " fill="#FFD93D"/>
+
+  <!-- глаза -->
+  <ellipse cx="40" cy="50" rx="6" ry="4" fill="#000"/>
+  <ellipse cx="60" cy="50" rx="6" ry="4" fill="#000"/>
+
+  <!-- улыбка / банановый намёк -->
+  <path d="M30 72 Q50 78 70 72"
+        stroke="#000"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"/>
+</svg>
