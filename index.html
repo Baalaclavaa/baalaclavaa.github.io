@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Baalaclavaa 🍌</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ FAVICON -->
+  <!-- FAVICON -->
   <link rel="icon" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/favicon.svg">
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FFD93D">
@@ -19,27 +19,34 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow-x: hidden;
       background: #000;
       font-family: Arial, sans-serif;
       color: #FFD93D;
+      overflow-x: hidden;
     }
 
-    /* 🌟 ДЫШАЩИЙ ФОН */
+    /* ====== ДЫШАЩЕЕ СВЕЧЕНИЕ СВЕРХУ ====== */
     .bg {
       position: fixed;
       inset: 0;
       background: radial-gradient(circle at top, #FFD93D 0%, #000 65%);
-      animation: bgGlow 2.5s ease-in-out infinite;
+      animation: topGlow 3s ease-in-out infinite;
       z-index: 0;
     }
 
-    @keyframes bgGlow {
-      0%,100% { filter: brightness(1); }
-      50% { filter: brightness(1.2); }
+    @keyframes topGlow {
+      0% {
+        box-shadow: inset 0 -120px 180px rgba(255,217,61,0.35);
+      }
+      50% {
+        box-shadow: inset 0 -160px 260px rgba(255,217,61,0.65);
+      }
+      100% {
+        box-shadow: inset 0 -120px 180px rgba(255,217,61,0.35);
+      }
     }
 
-    /* 🍌 ПАРАЛЛАКС-БАНАНЫ */
+    /* ====== ПАРАЛЛАКС-БАНАНЫ ====== */
     .banana-layer {
       position: fixed;
       inset: 0;
@@ -55,7 +62,7 @@
       will-change: transform;
     }
 
-    /* 📦 КОНТЕНТ */
+    /* ====== КОНТЕНТ ====== */
     .container {
       position: relative;
       z-index: 2;
@@ -89,7 +96,7 @@
       opacity: 0.9;
     }
 
-    /* 🔗 КНОПКИ */
+    /* ====== КНОПКИ ====== */
     .links a {
       display: block;
       margin: 12px 0;
@@ -103,13 +110,13 @@
       transition: transform 0.15s ease;
     }
 
-    /* ✨ АНИМИРОВАННОЕ СВЕЧЕНИЕ */
+    /* АНИМИРОВАННОЕ GLOW */
     @keyframes buttonGlow {
       0% {
         box-shadow:
           0 5px 0 #c9a800,
-          0 0 10px rgba(255,217,61,0.4),
-          0 0 18px rgba(255,217,61,0.6);
+          0 0 8px rgba(255,217,61,0.4),
+          0 0 16px rgba(255,217,61,0.6);
       }
       100% {
         box-shadow:
@@ -130,7 +137,7 @@
       opacity: 0.65;
     }
 
-    /* 💤 REDUCED MOTION */
+    /* ====== REDUCED MOTION ====== */
     @media (prefers-reduced-motion: reduce) {
       .bg,
       .links a:hover {
@@ -141,12 +148,12 @@
       }
     }
 
-    /* ⏸ ПАУЗА ПРИ СКРЫТОЙ ВКЛАДКЕ */
+    /* ====== ПАУЗА ПРИ НЕАКТИВНОЙ ВКЛАДКЕ ====== */
     .paused * {
       animation-play-state: paused !important;
     }
 
-    /* 🐌 LOW FPS MODE */
+    /* ====== LOW FPS MODE ====== */
     .low-fps .banana {
       display: none;
     }
@@ -163,7 +170,7 @@
   <div class="banana-layer" id="bananaLayer"></div>
 
   <script>
-    /* 🍌 PARALLAX BANANAS */
+    /* PARALLAX BANANAS */
     const layer = document.getElementById("bananaLayer");
     const bananas = [];
 
@@ -173,7 +180,7 @@
       b.textContent = "🍌";
       b.style.left = Math.random() * 100 + "%";
       b.style.top = Math.random() * 100 + "%";
-      b.dataset.speed = (0.3 + Math.random() * 0.8);
+      b.dataset.speed = 0.3 + Math.random() * 0.8;
       layer.appendChild(b);
       bananas.push(b);
     }
@@ -187,12 +194,12 @@
       });
     });
 
-    /* ⏸ VISIBILITY PAUSE */
+    /* PAUSE WHEN TAB HIDDEN */
     document.addEventListener("visibilitychange", () => {
       document.body.classList.toggle("paused", document.hidden);
     });
 
-    /* 🐌 FPS ADAPTIVE */
+    /* FPS ADAPTATION */
     let last = performance.now(), frames = 0;
     function fpsLoop(t) {
       frames++;
@@ -208,22 +215,19 @@
 
   <div class="container">
     <div class="avatar">🍌</div>
-
     <h1>Baalaclavaa</h1>
     <div class="bio">🖤💛 Банано-балаклавовский стример 💛🖤</div>
 
     <div class="links">
-      <a href="https://twitch.tv/baalaclavaa" target="_blank" rel="noopener">🎮 Twitch</a>
-      <a href="https://www.youtube.com/@Baalaclavaa" target="_blank" rel="noopener">▶️ YouTube</a>
-      <a href="https://t.me/+QFRqE_hSlZVhMWMy" target="_blank" rel="noopener">✈️ Telegram</a>
-      <a href="https://t.me/+jr6RQyzdwJY1MDli" target="_blank" rel="noopener">🤡 Мемы</a>
-            <a href="https://boosty.to/baalaclavaa" target="_blank" rel="noopener">🎨 Бусти</a>
-      <a href="https://dalink.to/baalaclavaa" target="_blank" rel="noopener">💰 Донат</a>
+      <a href="https://twitch.tv/baalaclavaa" target="_blank">🎮 Twitch</a>
+      <a href="https://www.youtube.com/@Baalaclavaa" target="_blank">▶️ YouTube</a>
+      <a href="https://t.me/+QFRqE_hSlZVhMWMy" target="_blank">✈️ Telegram</a>
+      <a href="https://t.me/+jr6RQyzdwJY1MDli" target="_blank">🤡 Мемы</a>
+      <a href="https://boosty.to/baalaclavaa" target="_blank" rel="noopener">🎨 Бусти</a>
+      <a href="https://dalink.to/baalaclavaa" target="_blank">💰 Донат</a>
     </div>
 
-    <footer>
-      © 2026 Baalaclavaa 🍌
-    </footer>
+    <footer>© 2026 Baalaclavaa 🍌</footer>
   </div>
 
 </body>
