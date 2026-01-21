@@ -5,6 +5,11 @@
   <title>Baalaclavaa 🍌</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- ✅ FAVICON (SAFE) -->
+  <link rel="icon" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#000000">
+
   <style>
     * { box-sizing: border-box; }
 
@@ -24,7 +29,7 @@
       position: fixed;
       inset: 0;
       background: radial-gradient(circle at top, #FFD93D 0%, #000 65%);
-      animation: glow 3s ease-in-out infinite;
+      animation: glow 2.5s ease-in-out infinite;
       z-index: 0;
     }
 
@@ -47,22 +52,6 @@
       opacity: 0.9;
       transition: transform 0.12s linear;
       will-change: transform;
-    }
-
-    /* 💥 BANANA EXPLOSION */
-    .explosion-banana {
-      position: fixed;
-      font-size: 26px;
-      pointer-events: none;
-      animation: explode 700ms ease-out forwards;
-      z-index: 5;
-    }
-
-    @keyframes explode {
-      to {
-        transform: translate(var(--x), var(--y)) rotate(720deg);
-        opacity: 0;
-      }
     }
 
     /* 📦 КОНТЕНТ */
@@ -99,32 +88,31 @@
       opacity: 0.9;
     }
 
-  .links a {
-  display: block;
-  margin: 12px 0;
-  padding: 15px;
-  border-radius: 18px;
-  background: #FFD93D;
-  color: #000;
-  font-weight: bold;
-  text-decoration: none;
-  box-shadow:
-    0 5px 0 #c9a800,
-    0 0 0 rgba(255, 217, 61, 0);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.25s ease;
-}
+    /* 🔗 КНОПКИ + GLOW */
+    .links a {
+      display: block;
+      margin: 12px 0;
+      padding: 15px;
+      border-radius: 18px;
+      background: #FFD93D;
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow:
+        0 5px 0 #c9a800,
+        0 0 0 rgba(255,217,61,0);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.25s ease;
+    }
 
-.links a:hover {
-  transform: translateY(2px);
-  box-shadow:
-    0 3px 0 #c9a800,
-    0 0 18px rgba(255, 217, 61, 0.8),
-    0 0 32px rgba(255, 217, 61, 0.5);
-}
-
-
+    .links a:hover {
+      transform: translateY(2px);
+      box-shadow:
+        0 3px 0 #c9a800,
+        0 0 18px rgba(255,217,61,0.8),
+        0 0 32px rgba(255,217,61,0.5);
+    }
 
     footer {
       margin-top: 26px;
@@ -132,17 +120,25 @@
       opacity: 0.65;
     }
 
-    /* 💤 Отключение анимаций на слабых устройствах */
-@media (prefers-reduced-motion: reduce) {
-  .banana,
-  .parallax-banana,
-  .avatar,
-  .bg-glow {
-    animation: none !important;
-  }
-}
+    /* 💤 REDUCED MOTION */
+    @media (prefers-reduced-motion: reduce) {
+      .bg {
+        animation: none !important;
+      }
+      .banana {
+        transition: none !important;
+      }
+    }
 
+    /* ⏸ PAUSE WHEN TAB HIDDEN */
+    .paused * {
+      animation-play-state: paused !important;
+    }
 
+    /* 🐌 LOW FPS MODE */
+    .low-fps .banana {
+      display: none;
+    }
   </style>
 </head>
 
@@ -152,7 +148,7 @@
   <div class="banana-layer" id="bananaLayer"></div>
 
   <script>
-    /* 🍌 ПАРАЛЛАКС */
+    /* 🍌 PARALLAX */
     const layer = document.getElementById("bananaLayer");
     const bananas = [];
     for (let i = 0; i < 18; i++) {
@@ -170,49 +166,41 @@
       const x = (e.clientX / innerWidth - 0.5) * 40;
       const y = (e.clientY / innerHeight - 0.5) * 40;
       bananas.forEach(b => {
-        const s = b.dataset.speed;
-        b.style.transform = `translate(${x * s}px, ${y * s}px)`;
+        b.style.transform = `translate(${x * b.dataset.speed}px, ${y * b.dataset.speed}px)`;
       });
     });
 
-    /* 💥 BANANA EXPLOSION */
-    document.querySelectorAll(".links a").forEach(link => {
-    link.addEventListener("click", e => {
-      const rect = link.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-
-      for (let i = 0; i < 14; i++) {
-        const b = document.createElement("div");
-        b.className = "explosion-banana";
-        b.textContent = "🍌";
-        b.style.left = cx + "px";
-        b.style.top = cy + "px";
-
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 90 + Math.random() * 90;
-        b.style.setProperty("--x", Math.cos(angle) * dist + "px");
-        b.style.setProperty("--y", Math.sin(angle) * dist + "px");
-
-        document.body.appendChild(b);
-        setTimeout(() => b.remove(), 700);
-      }
-      // ❗ НИЧЕГО не блокируем — браузер сам открывает новую вкладку
+    /* ⏸ VISIBILITY PAUSE */
+    document.addEventListener("visibilitychange", () => {
+      document.body.classList.toggle("paused", document.hidden);
     });
-  });
+
+    /* 🐌 FPS CHECK */
+    let last = performance.now(), frames = 0;
+    function fpsLoop(t) {
+      frames++;
+      if (t - last >= 1000) {
+        document.body.classList.toggle("low-fps", frames < 45);
+        frames = 0;
+        last = t;
+      }
+      requestAnimationFrame(fpsLoop);
+    }
+    requestAnimationFrame(fpsLoop);
   </script>
 
- <div class="container">
+  <div class="container">
     <div class="avatar">🍌</div>
 
     <h1>Baalaclavaa</h1>
-    <div class="bio">🖤💛 Банано-Балаклавовский Стример 💛🖤</div>
+    <div class="bio">🖤💛 Банано-Балаклавовский стример 💛🖤</div>
 
     <div class="links">
-      <a href="https://twitch.tv/baalaclavaa" target="_blank">🎮 Твич 🎮</a>
-      <a href="https://www.youtube.com/@Baalaclavaa" target="_blank">▶️ Ютуб ▶️</a>
-      <a href="https://t.me/+QFRqE_hSlZVhMWMy" target="_blank">✈️ Телеграм ✈️</a>
-      <a href="https://t.me/+jr6RQyzdwJY1MDli" target="_blank">🤡 Телеграм с мемами 🤡</a>
+      <a href="https://twitch.tv/baalaclavaa" target="_blank" rel="noopener">🎮 Твич</a>
+      <a href="https://www.youtube.com/@Baalaclavaa" target="_blank" rel="noopener">▶️ Ютуб</a>
+      <a href="https://t.me/+QFRqE_hSlZVhMWMy" target="_blank" rel="noopener">✈️ Телеграм</a>
+      <a href="https://t.me/+jr6RQyzdwJY1MDli" target="_blank" rel="noopener">🤡 Мемы</a>
+      <a href="https://dalink.to/baalaclavaa" target="_blank" rel="noopener">💰 Донат</a>
     </div>
 
     <footer>
@@ -222,3 +210,4 @@
 
 </body>
 </html>
+
